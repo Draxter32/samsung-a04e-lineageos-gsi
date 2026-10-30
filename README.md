@@ -11,10 +11,10 @@ Guía paso a paso, en español, de una instalación **hecha y probada en un equi
 4. Grabar el GSI **`arm64_bvN`** de LineageOS 20 en `system`.
 5. Reiniciar. Arranca en unos minutos.
 
-**Resultado:** cámara, audio, wifi, Bluetooth y táctil funcionan. Red móvil sin probar.
+**Resultado:** cámara, audio, wifi y Bluetooth funcionan. Red móvil sin probar.
 
 ## Índice
-[Equipo](#equipo-donde-se-probó) · [La clave del nombre "A-only"](#la-clave-que-casi-nos-confunde) · [Archivos](#archivos-usados) · [Antes de empezar](#antes-de-empezar) · [Paso a paso](#pasos) · [Qué funciona](#qué-se-comprobó) · [Rendimiento](#rendimiento) · [Táctil](#pantalla-táctil-lenta-tras-cambiar-la-pantalla) · [Advertencias](#advertencias)
+[Equipo](#equipo-donde-se-probó) · [La clave del nombre "A-only"](#la-clave-que-casi-nos-confunde) · [Archivos](#archivos-usados) · [Antes de empezar](#antes-de-empezar) · [Paso a paso](#pasos) · [Qué funciona](#qué-se-comprobó) · [Rendimiento](#rendimiento) · [Advertencias](#advertencias)
 
 ## Equipo donde se probó
 | Dato | Valor |
@@ -86,24 +86,10 @@ La partición `system` del A04e mide 3,92 GB y la imagen 2,24 GB, así que cabe.
 | Bluetooth, sensores (7) | ✅ |
 | Cámara | ✅ probada por el usuario (el sistema detecta 2 cámaras) |
 | Audio | ✅ probado por el usuario |
-| Pantalla táctil | ✅ responde bien con la alta sensibilidad activada (confirmado por el usuario) |
 | **Red móvil / SIM / datos** | ❓ **sin probar** (el equipo no tenía chip). En el hermano A04 con GSI de Lineage 21 se reportó que **no hay datos móviles** ([phhusson#2623](https://github.com/phhusson/treble_experimentations/issues/2623)) |
 
 ## Rendimiento
 Con Lineage hay ~1,4 GB de RAM libres, frente a ~850 MB con el One UI de fábrica. Ajustes aplicados: animaciones a 0,5x y desactivar el asistente de configuración (`pm disable-user --user 0 org.lineageos.setupwizard`).
-
-## Pantalla táctil lenta tras cambiar la pantalla
-Si el panel es `TXD_BOE_JD9365T` (Jadard), con root:
-```
-echo 1 > /proc/jadard_touch/SENSITIVITY
-```
-Para que sobreviva al reinicio, un script de Magisk en `/data/adb/service.d/touch-sens.sh`:
-```
-#!/system/bin/sh
-sleep 20
-echo 1 > /proc/jadard_touch/SENSITIVITY
-```
-El modo viene desactivado (`High_sensitivity_enable=0`) en este panel. Al activarlo, el usuario confirmó que el táctil responde bien (es una apreciación, no una medición). Si no ayuda en tu caso, el problema puede ser la pantalla de repuesto o su conector.
 
 ## Advertencias
 - Solo se probó con **este modelo y este firmware**. Otros SM-A042x pueden diferir.
@@ -117,8 +103,7 @@ Installing a **LineageOS 20 GSI** (Android 13) on the **Samsung Galaxy A04e (SM-
 - Treble Info says "A-only" because there is no A/B slot, but the device uses dynamic partitions + system-as-root, so the correct image is a **`b`** GSI (`arm64_bvN`), not an `a` one.
 - Heimdall only works on the **first session after replugging the cable**; run the flash command first. Partition name is lowercase `recovery`.
 - Steps: backup (never publish IMEI/`nvram`/`persist`) → flash TWRP (`heimdall flash --recovery recovery.img --no-reboot`) → boot TWRP → Format Data → `dd` the decompressed GSI to `/dev/block/mapper/system` → reboot.
-- Result: boots; camera, audio, wifi, Bluetooth, touch OK. **Mobile network/SIM untested.** A similar A04 reported no mobile data on LineageOS 21 GSI.
-- Touch lag after a screen replacement (Jadard panel): `echo 1 > /proc/jadard_touch/SENSITIVITY`.
+- Result: boots; camera, audio, wifi, Bluetooth OK. **Mobile network/SIM untested.** A similar A04 reported no mobile data on LineageOS 21 GSI.
 Full commands are in the Spanish steps above.
 
 ## Créditos y fuentes
