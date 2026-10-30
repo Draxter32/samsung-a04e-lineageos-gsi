@@ -1,0 +1,11 @@
+# Nunca subir: contienen IMEI y datos personales, o son archivos pesados
+*.img
+*.img.gz
+*.img.tar
+*.tar
+*.pit
+*.apk
+particiones/
+sdcard/
+backups-a04e/
+hash-*.txt
